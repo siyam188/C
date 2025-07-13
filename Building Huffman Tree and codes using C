@@ -1,0 +1,65 @@
+#include<stdio.h>
+#include <stdio.h>
+#define MAX 256
+int findMin(int freq[],int used[],int size)
+{
+  int min = -1;
+  for (int i=0;i<size ; i++)
+  {
+      if( used [i]==0 && (min==-1 || freq[i]<freq[min])){
+        min=i;
+      }
+  }
+    return min;
+}
+
+    void huffmanCoding(char symbols[],int freq[],int size){
+    int used [MAX]={0};
+    int totalFreq [MAX]= {0};
+    int left [MAX]={0};
+    int right[MAX]={0};
+    for (int i=0;i <size;i++){
+        totalFreq[i]=freq[i];
+        left[i]=-1;
+        right[i]=-1;
+    }
+
+
+    for (int i= size; i< 2 * size -1;i++){
+     int min1=findMin(totalFreq,used,i);
+     used[min1]=1;
+     int min2=findMin (totalFreq,used,i);
+     used[min2]=1;
+     totalFreq[i]=totalFreq[min1]+totalFreq[min2];
+     left[i]=min1;
+     right[i]=min2;
+
+    }
+    int code [MAX];
+    int codesize=0;
+    printf("Symbol\tFrequency\tHuffman Code\n");
+    for(int i=0; i<size;i++){
+        int current=i;
+        codesize=0;
+        for(int j=size*2-2; j>=size ;j--){
+            if (left[j]==current){
+                code[codesize++]=0;
+                current = j;
+            } else if (right[j]==current){
+            code[codesize++]=1;
+            current=j;
+            }
+
+
+    printf("%c\t%d\t\t",symbols[i],freq[i]);
+    for(int j= codesize-1; j>=0;j--){
+        printf("%d",code[j]);}
+    } printf("\n");
+    }}
+int main(){
+ char symbols[]={'a','b','c','d','e',};
+ int freq[]={5,9,12,13,16};
+ int size=sizeof(symbols)/sizeof(symbols[0]);
+ huffmanCoding(symbols,freq,size);
+ return 0;
+ }
